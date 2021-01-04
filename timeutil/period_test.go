@@ -43,11 +43,15 @@ func TestGetMonthTs(t *testing.T) {
 	tests := []struct {
 		name string
 		args time.Time
-		want PeriodTs
+		want MonthPeriodTs
 	}{
-		{"Case1", time1, PeriodTs{
-			time.Date(2020, 12, 1, 0, 0, 0, 0, time.Local).Unix(),
-			time.Date(2021, 1, 1, 0, 0, 0, 0, time.Local).Unix()},
+		{"Case1", time1, MonthPeriodTs{
+			2020,
+			12,
+			PeriodTs{
+				time.Date(2020, 12, 1, 0, 0, 0, 0, time.Local).Unix(),
+				time.Date(2021, 1, 1, 0, 0, 0, 0, time.Local).Unix()},
+		},
 		},
 	}
 	for _, tt := range tests {
@@ -64,39 +68,117 @@ func TestGetYearTs(t *testing.T) {
 	tests := []struct {
 		name string
 		args time.Time
-		want map[int]PeriodTs
+		want []MonthPeriodTs
 	}{
-		{"Case1", time1, map[int]PeriodTs{
-			1: {time.Date(2020, 1, 1, 0, 0, 0, 0, time.Local).Unix(),
-				time.Date(2020, 2, 1, 0, 0, 0, 0, time.Local).Unix()},
-			2: {time.Date(2020, 2, 1, 0, 0, 0, 0, time.Local).Unix(),
-				time.Date(2020, 3, 1, 0, 0, 0, 0, time.Local).Unix()},
-			3: {time.Date(2020, 3, 1, 0, 0, 0, 0, time.Local).Unix(),
-				time.Date(2020, 4, 1, 0, 0, 0, 0, time.Local).Unix()},
-			4: {time.Date(2020, 4, 1, 0, 0, 0, 0, time.Local).Unix(),
-				time.Date(2020, 5, 1, 0, 0, 0, 0, time.Local).Unix()},
-			5: {time.Date(2020, 5, 1, 0, 0, 0, 0, time.Local).Unix(),
-				time.Date(2020, 6, 1, 0, 0, 0, 0, time.Local).Unix()},
-			6: {time.Date(2020, 6, 1, 0, 0, 0, 0, time.Local).Unix(),
-				time.Date(2020, 7, 1, 0, 0, 0, 0, time.Local).Unix()},
-			7: {time.Date(2020, 7, 1, 0, 0, 0, 0, time.Local).Unix(),
-				time.Date(2020, 8, 1, 0, 0, 0, 0, time.Local).Unix()},
-			8: {time.Date(2020, 8, 1, 0, 0, 0, 0, time.Local).Unix(),
-				time.Date(2020, 9, 1, 0, 0, 0, 0, time.Local).Unix()},
-			9: {time.Date(2020, 9, 1, 0, 0, 0, 0, time.Local).Unix(),
-				time.Date(2020, 10, 1, 0, 0, 0, 0, time.Local).Unix()},
-			10: {time.Date(2020, 10, 1, 0, 0, 0, 0, time.Local).Unix(),
-				time.Date(2020, 11, 1, 0, 0, 0, 0, time.Local).Unix()},
-			11: {time.Date(2020, 11, 1, 0, 0, 0, 0, time.Local).Unix(),
-				time.Date(2020, 12, 1, 0, 0, 0, 0, time.Local).Unix()},
-			12: {time.Date(2020, 12, 1, 0, 0, 0, 0, time.Local).Unix(),
-				time.Date(2021, 1, 1, 0, 0, 0, 0, time.Local).Unix()},
+		{"Case1", time1, []MonthPeriodTs{
+			{2020, 1,
+				PeriodTs{time.Date(2020, 1, 1, 0, 0, 0, 0, time.Local).Unix(),
+					time.Date(2020, 2, 1, 0, 0, 0, 0, time.Local).Unix()}},
+			{2020, 2,
+				PeriodTs{time.Date(2020, 2, 1, 0, 0, 0, 0, time.Local).Unix(),
+					time.Date(2020, 3, 1, 0, 0, 0, 0, time.Local).Unix()}},
+			{2020, 3,
+				PeriodTs{time.Date(2020, 3, 1, 0, 0, 0, 0, time.Local).Unix(),
+					time.Date(2020, 4, 1, 0, 0, 0, 0, time.Local).Unix()}},
+			{2020, 4,
+				PeriodTs{time.Date(2020, 4, 1, 0, 0, 0, 0, time.Local).Unix(),
+					time.Date(2020, 5, 1, 0, 0, 0, 0, time.Local).Unix()}},
+			{2020, 5,
+				PeriodTs{time.Date(2020, 5, 1, 0, 0, 0, 0, time.Local).Unix(),
+					time.Date(2020, 6, 1, 0, 0, 0, 0, time.Local).Unix()}},
+			{2020, 6,
+				PeriodTs{time.Date(2020, 6, 1, 0, 0, 0, 0, time.Local).Unix(),
+					time.Date(2020, 7, 1, 0, 0, 0, 0, time.Local).Unix()}},
+			{2020, 7,
+				PeriodTs{time.Date(2020, 7, 1, 0, 0, 0, 0, time.Local).Unix(),
+					time.Date(2020, 8, 1, 0, 0, 0, 0, time.Local).Unix()}},
+			{2020, 8,
+				PeriodTs{time.Date(2020, 8, 1, 0, 0, 0, 0, time.Local).Unix(),
+					time.Date(2020, 9, 1, 0, 0, 0, 0, time.Local).Unix()}},
+			{2020, 9,
+				PeriodTs{time.Date(2020, 9, 1, 0, 0, 0, 0, time.Local).Unix(),
+					time.Date(2020, 10, 1, 0, 0, 0, 0, time.Local).Unix()}},
+			{2020, 10,
+				PeriodTs{time.Date(2020, 10, 1, 0, 0, 0, 0, time.Local).Unix(),
+					time.Date(2020, 11, 1, 0, 0, 0, 0, time.Local).Unix()}},
+			{2020, 11,
+				PeriodTs{time.Date(2020, 11, 1, 0, 0, 0, 0, time.Local).Unix(),
+					time.Date(2020, 12, 1, 0, 0, 0, 0, time.Local).Unix()}},
+			{2020, 12,
+				PeriodTs{time.Date(2020, 12, 1, 0, 0, 0, 0, time.Local).Unix(),
+					time.Date(2021, 1, 1, 0, 0, 0, 0, time.Local).Unix()}},
 		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := GetYearTs(tt.args); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("GetYearTs() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGetLastNMonthTs(t *testing.T) {
+	time1, _ := time.Parse("2006-01-02 15:04:05", "2020-12-09 00:32:00")
+	time2, _ := time.Parse("2006-01-02 15:04:05", "2021-01-04 00:32:00")
+
+	type args struct {
+		n int
+		t time.Time
+	}
+	tests := []struct {
+		name string
+		args args
+		want []MonthPeriodTs
+	}{
+		{
+			"Case1", args{12, time1}, GetYearTs(time1),
+		},
+		{
+			"Case2", args{12, time2}, []MonthPeriodTs{
+				{2020, 2,
+					PeriodTs{time.Date(2020, 2, 1, 0, 0, 0, 0, time.Local).Unix(),
+						time.Date(2020, 3, 1, 0, 0, 0, 0, time.Local).Unix()}},
+				{2020, 3,
+					PeriodTs{time.Date(2020, 3, 1, 0, 0, 0, 0, time.Local).Unix(),
+						time.Date(2020, 4, 1, 0, 0, 0, 0, time.Local).Unix()}},
+				{2020, 4,
+					PeriodTs{time.Date(2020, 4, 1, 0, 0, 0, 0, time.Local).Unix(),
+						time.Date(2020, 5, 1, 0, 0, 0, 0, time.Local).Unix()}},
+				{2020, 5,
+					PeriodTs{time.Date(2020, 5, 1, 0, 0, 0, 0, time.Local).Unix(),
+						time.Date(2020, 6, 1, 0, 0, 0, 0, time.Local).Unix()}},
+				{2020, 6,
+					PeriodTs{time.Date(2020, 6, 1, 0, 0, 0, 0, time.Local).Unix(),
+						time.Date(2020, 7, 1, 0, 0, 0, 0, time.Local).Unix()}},
+				{2020, 7,
+					PeriodTs{time.Date(2020, 7, 1, 0, 0, 0, 0, time.Local).Unix(),
+						time.Date(2020, 8, 1, 0, 0, 0, 0, time.Local).Unix()}},
+				{2020, 8,
+					PeriodTs{time.Date(2020, 8, 1, 0, 0, 0, 0, time.Local).Unix(),
+						time.Date(2020, 9, 1, 0, 0, 0, 0, time.Local).Unix()}},
+				{2020, 9,
+					PeriodTs{time.Date(2020, 9, 1, 0, 0, 0, 0, time.Local).Unix(),
+						time.Date(2020, 10, 1, 0, 0, 0, 0, time.Local).Unix()}},
+				{2020, 10,
+					PeriodTs{time.Date(2020, 10, 1, 0, 0, 0, 0, time.Local).Unix(),
+						time.Date(2020, 11, 1, 0, 0, 0, 0, time.Local).Unix()}},
+				{2020, 11,
+					PeriodTs{time.Date(2020, 11, 1, 0, 0, 0, 0, time.Local).Unix(),
+						time.Date(2020, 12, 1, 0, 0, 0, 0, time.Local).Unix()}},
+				{2020, 12,
+					PeriodTs{time.Date(2020, 12, 1, 0, 0, 0, 0, time.Local).Unix(),
+						time.Date(2021, 1, 1, 0, 0, 0, 0, time.Local).Unix()}},
+				{2021, 1,
+					PeriodTs{time.Date(2021, 1, 1, 0, 0, 0, 0, time.Local).Unix(),
+						time.Date(2021, 2, 1, 0, 0, 0, 0, time.Local).Unix()}},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GetLastNMonthTs(tt.args.n, tt.args.t); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetLastNMonthTs() = %v, want %v", got, tt.want)
 			}
 		})
 	}

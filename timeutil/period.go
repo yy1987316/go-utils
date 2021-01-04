@@ -7,6 +7,12 @@ type PeriodTs struct {
 	EndTime   int64
 }
 
+type MonthPeriodTs struct {
+	Year  int
+	Month int
+	PeriodTs
+}
+
 // Duration returns the period duration
 func (p *PeriodTs) Duration() int64 {
 	return p.EndTime - p.StartTime
@@ -30,22 +36,32 @@ func (p *PeriodTs) Cover(p2 *PeriodTs) *PeriodTs {
 }
 
 // GetMonthTs returns a period of the month of t
-func GetMonthTs(t time.Time) PeriodTs {
+func GetMonthTs(t time.Time) MonthPeriodTs {
 	year := t.Year()
 	month := t.Month()
 	startTime := time.Date(year, month, 1, 0, 0, 0, 0, time.Local)
 	endTime := time.Date(year, month+1, 1, 0, 0, 0, 0, time.Local)
-	return PeriodTs{startTime.Unix(), endTime.Unix()}
+	return MonthPeriodTs{year, int(month), PeriodTs{startTime.Unix(), endTime.Unix()}}
 }
 
-// GetYearTs returns a period map of every month of the year of t, with key in [1,12]
-func GetYearTs(t time.Time) map[int]PeriodTs {
-	tsMap := make(map[int]PeriodTs)
-	year := t.Year()
+// GetYearTs returns a period slice of every month of the year of t
+func GetYearTs(t time.Time) []MonthPeriodTs {
+	tsList := make([]MonthPeriodTs, 0, 12)
 	for i := 1; i < 13; i++ {
-		startTime := time.Date(year, time.Month(i), 1, 0, 0, 0, 0, time.Local)
-		endTime := time.Date(year, time.Month(i)+1, 1, 0, 0, 0, 0, time.Local)
-		tsMap[i] = PeriodTs{startTime.Unix(), endTime.Unix()}
+		tsList = append(tsList, GetMonthTs(time.Date(t.Year(), time.Month(i), 1, 0, 0, 0, 0, time.Local)))
 	}
-	return tsMap
+	return tsList
+}
+
+// GetLastNMonthTs returns a period slice of every month of last n month(s) before t (include the month of t)
+func GetLastNMonthTs(n int, t time.Time) []MonthPeriodTs {
+	if n <= 0 {
+		return nil
+	}
+	tsList := make([]MonthPeriodTs, 0, n)
+	for i := n; i > 0; i-- {
+		p := t.AddDate(0, -(i - 1), 0)
+		tsList = append(tsList, GetMonthTs(p))
+	}
+	return tsList
 }
