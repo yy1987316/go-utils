@@ -58,9 +58,12 @@ func GetLastNMonthTs(n int, t time.Time) []MonthPeriodTs {
 	if n <= 0 {
 		return nil
 	}
+
+	// use the first day of the month of t to calculate the last n month
+	monthFirstDay := time.Date(t.Year(), t.Month(), 1, 0, 0, 0, 0, time.Local)
 	tsList := make([]MonthPeriodTs, 0, n)
 	for i := n; i > 0; i-- {
-		p := t.AddDate(0, -(i - 1), 0)
+		p := monthFirstDay.AddDate(0, -(i - 1), 0)
 		tsList = append(tsList, GetMonthTs(p))
 	}
 	return tsList

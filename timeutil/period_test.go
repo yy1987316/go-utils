@@ -120,7 +120,7 @@ func TestGetYearTs(t *testing.T) {
 
 func TestGetLastNMonthTs(t *testing.T) {
 	time1, _ := time.Parse("2006-01-02 15:04:05", "2020-12-09 00:32:00")
-	time2, _ := time.Parse("2006-01-02 15:04:05", "2021-01-04 00:32:00")
+	time2, _ := time.Parse("2006-01-02 15:04:05", "2021-01-30 00:32:00")
 
 	type args struct {
 		n int
